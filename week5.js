@@ -13,10 +13,9 @@
 //I then translated the SVG code to P5.js code
 
 function setup() {
-
-	createCanvas(1200,400)
+	createCanvas(1200,400);
 	background('black');
-	alert("Click Mouse to Draw")
+	alert("Click Mouse to Draw");
 }
 
 //original height and width of original drawing
@@ -33,7 +32,7 @@ function draw() {
 function mouseClicked(){
 	//generate random percentage for size
 	//this is used to preserve aspect ratios
-	p = random(.3,1)
+	p = random(.3,1);
 
 	//create character on mouse click
 	//color is randomly generated 
@@ -45,7 +44,7 @@ function mouseClicked(){
 //characterWidth, characterHeight are the height and width proportions for the face
 //characterColor should be a value between 0-360 to represent a hue value
 function character(positionX, positionY, characterWidth, characterHeight, characterColor){
-	//scale and translate are used to change size and position for modularity
+	//scale is used to change size for modularity
 	scale(p,p);
 	//translate so that it corresponds better with the mouse click location
 	positionX= (positionX/p)-(characterWidth)/2;
@@ -259,9 +258,3 @@ function eyebrows(h,x1,y1,x2,y2){
 		vertex(x2+15.2,y2-3.13);
 	endShape();
 }
-
-
-
-
-
-
