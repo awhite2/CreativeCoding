@@ -12,6 +12,8 @@ function setup(){
   frameRate(15);
   background(1);
   colorMode(RGB);
+  color1 = color(255,0,0);
+  color2 = color (255,255,0);
 }
 
 //speed determines how far apart the shapes will be
@@ -27,11 +29,12 @@ let posy = 0;
 //size of the shapes
 let size = 35;
 
+let color1;
+let color2;
+
 
 function draw() {
     //initialize the color for interpolating
-    let color1 = color(255,0,0);
-    let color2 = color (255,255,0);
     noFill();
 
 
@@ -53,10 +56,10 @@ function draw() {
     }
 
     //set the current color relative to what position we are currently in
-    let color3 = lerpColor(color1, color2, posx/200);
+    let color3 = lerpColor(color1, color2, posx/(width/2));
     stroke(color3);
 
-    //rotate to create the spiraling effect
+    //rotate to create the spiraling curve effect
     rotate(radians(posx));
 
 
@@ -78,6 +81,18 @@ function draw() {
             }
             pop();
         }
-
     
+}
+
+//on mouse click, change the colors to interpolate between
+function mouseClicked(){
+
+
+    color1 = color(random(0, 255), random(0, 128), random(0, 25));
+    color2 = color(random(0, 25), random(0, 128), random(0, 255));
+
+    print(color1.toString());
+    print(color2.toString());
+    
+    return false;
 }
