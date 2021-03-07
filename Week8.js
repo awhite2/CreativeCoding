@@ -5,6 +5,8 @@ March 2021
 
 Create a Particle System using custom Javascript Objects (ES6 class notation). 
 Your Particle object must contain the following properties: position, size, color, speed.
+
+
 */
 
 
@@ -21,15 +23,13 @@ function getRandomInt(max) {
 //params is an array of 4 numbers between -2 and 2
 
 class Dot{
-    constructor(pos, size, color, speed, params){
+    constructor(pos, color, params){
         this.pos = createVector(pos.x, pos.y);
         this.pos2 = createVector(pos.x, pos.y); //if newPos isn't called, pos by default
-        this.size = size;
         this.color = color;
-        this.speed = speed;
         this.params = params;
 
-        this.color.setAlpha(100);
+        this.color.setAlpha(50);
     }//end constructor
 
     newPos(){   
@@ -46,12 +46,7 @@ class Dot{
 
 
 
-
-
-//create curve
-//create additional curves
-//create animation of curves
-
+//handles a system of dots inluding single and multiple curves
 class DotSystem{
     constructor(pos, size, color, speed, params){
         this.pos = createVector(pos.x, pos.y);
@@ -60,65 +55,79 @@ class DotSystem{
         this.speed = speed;
         this.params = params;
         this.dotSys = [];
+        this.num;
     }
 
 
     //calculate the number of curves that have been input
     numberOfCurves(){
-        return this.params.length/4;
+        return this.num = this.params.length/4;
      }
 
     
     //generate a single curve
-    generateCurve(params = []){
+    generateCurve(c, params = []){
         let dotSeq = [];
         let p = createVector(this.pos.x, this.pos.y);
-        for (var i=0; i<12000; i++){
-            dotSeq.push(new Dot(p, this.size, this.color, this.speed, params));
+        for (var i=0; i<this.size; i++){
+            dotSeq.push(new Dot(p, c, params));
             dotSeq[i].newPos();
             p.set(dotSeq[i].pos2.x/100, dotSeq[i].pos2.y/100);
         }
         return dotSeq;
     }
 
+    //generate a multidimensional array of Dots based on the paramets inputs
+    //should change to a second variable to splice probably
     generateMultiArray(){
         let num = this.numberOfCurves();
+
+        let c = this.triadicColor(this.color);
         for(var i=0; i<num; i++){
-            this.dotSys.push(this.generateCurve(this.params.splice(0,4)));
+            this.dotSys.push(this.generateCurve(c[i%3], this.params.splice(0,4)));
         }
     }
 
+    //draw a curve based on an array of Dots
     drawCurve(num, myArray = this.dotSys[num]){
-        //var myArray = this.dotSys[num];
         for(var i=0; i<myArray.length; i++){
-            strokeWeight(myArray[i].size);
-            strokeWeight(3);
+            strokeWeight(1);
             stroke(color(myArray[i].color));
             point(myArray[i].pos2.x, myArray[i].pos2.y);
         }
     }
 
-
+    //create a new curve based on two other curves 
     animate(lerpPos){
         let currentArray = [];
         let firstCurve = this.dotSys[0];
         let secondCurve = this.dotSys[1];
         let prams = [];
 
-        //for each element in dot array calculate the difference between the two vectors at current pos
-        //draw the new array
-            background(255);
-            prams.splice(0);
-            currentArray.splice(0);
-            for(var p = 0; p < firstCurve[0].params.length; p++){
-                prams.push(lerp(firstCurve[0].params[p], secondCurve[0].params[p], lerpPos))
-           }
-            currentArray = this.generateCurve(prams);
-            this.drawCurve(null, currentArray);
-            lerpPos+=this.speed;
+        let c;
+
+        for(var p = 0; p < firstCurve[0].params.length; p++){
+            prams.push(lerp(firstCurve[0].params[p], secondCurve[0].params[p], lerpPos))
+            c = lerpColor(firstCurve[0].color, secondCurve[0].color, lerpPos);
+        }
+        currentArray = this.generateCurve(c, prams);
+        this.drawCurve(null, currentArray);
+        lerpPos+=this.speed;
         return lerpPos;
     }
-}
+
+    triadicColor(col = this.color){
+        colorMode(HSB);
+        let c = hue(col);
+        let s = saturation(col);
+        let b = brightness(col);
+        print(c);
+        let c2 = (c - 120) < 0 ? c + 240 : c - 120;
+        let c3 = (c + 120) > 360 ? 480 - c : c + 120;
+
+        return [color(c,s,b), color(c2,s,b), color(c3,s,b)];
+    }
+}// end class def
 
 
 
@@ -133,18 +142,18 @@ let c; //color
 let v; //speed
 let prams = []; //parameters
 let dots1; 
-let d = [];
 let lerpPos=0;
 
 function setup(){
     createCanvas(600,600);
     background(255);
+    colorMode(HSB);
 
 
-    p = createVector(1,1);
-    s = 1;
-    c = color('black');
-    v = .01;
+    p = createVector(1,1); //starting position
+    s = 50000; //size or number of particles in the system
+    c = color('purple');
+    v = .01; //relates to the difference between start and end points
     
 
     //code if you want random parameters, but most don't look good
@@ -169,18 +178,21 @@ function setup(){
         1.603113595680595,
         -1.3469920131041553
     ]
-    frameRate(24);
+    frameRate(40);
      dots1 = new DotSystem(p, s, c, v, prams);
      dots1.generateMultiArray();
+     print(dots1.triadicColor(dots1.color));
 
 }
 
 function draw(){
-    //background(255);
     translate(width/2, height/2);
 
     print("animate now");
     if(lerpPos<1){
+        background(0);
         lerpPos = dots1.animate(lerpPos);
+    }else{
+        noLoop();
     }
 }
