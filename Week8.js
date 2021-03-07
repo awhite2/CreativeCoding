@@ -98,10 +98,10 @@ class DotSystem{
     }
 
     //create a new curve based on two other curves 
-    animate(lerpPos){
+    animate(lerpPos, n){
         let currentArray = [];
-        let firstCurve = this.dotSys[0];
-        let secondCurve = this.dotSys[1];
+        let firstCurve = this.dotSys[n];
+        let secondCurve = this.dotSys[n+1];
         let prams = [];
 
         let c;
@@ -121,7 +121,6 @@ class DotSystem{
         let c = hue(col);
         let s = saturation(col);
         let b = brightness(col);
-        print(c);
         let c2 = (c - 120) < 0 ? c + 240 : c - 120;
         let c3 = (c + 120) > 360 ? 480 - c : c + 120;
 
@@ -143,6 +142,7 @@ let v; //speed
 let prams = []; //parameters
 let dots1; 
 let lerpPos=0;
+let n = 0;
 
 function setup(){
     createCanvas(600,600);
@@ -181,18 +181,22 @@ function setup(){
     frameRate(40);
      dots1 = new DotSystem(p, s, c, v, prams);
      dots1.generateMultiArray();
-     print(dots1.triadicColor(dots1.color));
 
 }
 
 function draw(){
     translate(width/2, height/2);
 
-    print("animate now");
     if(lerpPos<1){
         background(0);
-        lerpPos = dots1.animate(lerpPos);
+        lerpPos = dots1.animate(lerpPos, n);
     }else{
+        if(n < dots1.num-2){
+            lerpPos = 0;
+            n++;
+            lerpPos = dots1.animate(lerpPos, n);
+        }else{
         noLoop();
+        }
     }
 }
