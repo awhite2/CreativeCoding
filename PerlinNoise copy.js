@@ -1,10 +1,36 @@
-var inc = 0.01; 
+class Range{
+    constructor(start, inc, speed, h){
+        this.start = start;
+        this.inc = inc;
+        this.height = h;
+        this.speed = speed;
+    }
+
+    drawRange(){
+        var xoff = this.start;
+        beginShape();
+        vertex(0,height);
+        for (var a = 0;a<width; a++){
+            var b = map(noise(xoff), 0, 1, this.height, height);
+            vertex(a, b);
+    
+            xoff += this.inc;
+        }
+        vertex(width, height);
+        endShape();
+        this.start += this.speed;
+    } 
+    
+
+}
+
 var start = 0;
-var inc2 = inc/10;
 var start2 = 10000;
+var speed = 0.01;
 
 let colors = [];
-
+let p;
+let r;
 
 function setup(){
     createCanvas(windowWidth, windowHeight);
@@ -22,46 +48,23 @@ function setup(){
         color(134, 201, 165) //9: blue 
     ]
     tint(colors[0]);
+    p = new Range(start, 0.01, speed/3, 0);
+    r = new Range(start2, 0.008, speed, height/2);
 }
+
 
 function draw(){
     background(colors[9]);
 
-    var xoff = start;
     noStroke();
+    
     fill(colors[8]);
-
-    let p = new Range(start, inc, inc2, 0);
     p.drawRange();
-    start += p.speed;
+    //start += p.speed;
+
 
     fill(colors[1]);
-    let r = new Range(start2, inc, inc, height/2);
     r.drawRange();
-    start2 += r.speed;
 
 }
 
-class Range{
-    constructor(start, inc, speed, height){
-        this.start = start;
-        this.inc = inc;
-        this.speed = speed;
-        this.height = height;
-    }
-
-    drawRange(){
-        var xoff = this.start;
-        beginShape();
-        vertex(0,height);
-        for (var a = 0;a<width; a++){
-            var b = map(noise(xoff), 0, 1, this.height, height);
-            vertex(a, b);
-    
-            xoff += this.inc;
-        }
-        vertex(width, height);
-        endShape();
-    }
-
-}
