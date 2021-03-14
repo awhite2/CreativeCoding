@@ -1,25 +1,34 @@
 /*
     Abra White
+    March 2021
     Homework 9 
     DOM
 
-    
+    Generates a mountain terrain landscape animation
+    sliders affect:
+    mountainHeight (size)
+    timeOfDay (color)
+    drivingSpeed (animationSpeed)
+
+    "Pause" changes isAnimated and stops and starts the animation
 */
 
-var start = 0;
-var start2 = 10000;
 var speed = 0.01;
 
 let colors = [];
-let p;
-let r;
 
+//Ranges
+let mountains1;
+let mountains2;
+
+//DOM Elements
 let mountainHeight;
 let timeOfDay;
 let drivingSpeed;
 let btn;
 
 let isAnimated = 1;
+let weird = false;
 
 function setup(){
     createCanvas(windowWidth, windowHeight);
@@ -33,37 +42,71 @@ function setup(){
         color(140, 61, 43), //4: dark terracotta
         color(28, 42, 45), //5: dark blue
         color(249,237,50), //6: yellow
-        color(195,178,175)  //7: grey  
+        color(195,178,175),  //7: grey  
+        color(155, 77, 91, 0)
     ]
+    let box = width/20;
 
+    let heightText = createElement('span', 'height');
+    heightText.position(box+width/10,box);
 
     mountainHeight = createSlider(-height/2, height/2, 0, 10);
-    mountainHeight.position(width/20, width/20);
+    mountainHeight.position(box, box);
     mountainHeight.style('width', width/10);
+
+    let timeText = createElement('span','time');
+    timeText.position(box+width/10,box+20);
     
     timeOfDay = createSlider(0, 1, 0, .1);
-    timeOfDay.position(width/20, width/20+20);
+    timeOfDay.position(box, box+20);
     timeOfDay.style('width', width/10);
 
-    drivingSpeed = createSlider(0.001, 0.05, 0.01, 0.001);
-    drivingSpeed.position(width/20, width/20+40);
+    let speedText = createElement('span','speed');
+    speedText.position(box+width/10,box+40);
+
+    drivingSpeed = createSlider(0.004, 0.05, 0.01, 0.001);
+    drivingSpeed.position(box, box+40);
     drivingSpeed.style('width', width/10);
 
+    //style the text
+    let text = selectAll('span');
+    for(var i = 0; i<text.length; i++){
+        text[i].style('padding-left','1%');
+        text[i].style('font-family', 'sans-serif');
+
+        text[i].style('wrap','left');
+    }
+
+    //START AND STOP ANIMATION
     btn = createButton('PAUSE');
-    btn.position(width/20, width/20+60);
+    btn.position(box, box+60);
     btn.style('width', width/10);
-
-
-    //back range of mountains
-    //divide speed for a parallax effect
-    p = new Range(start, .001, speed/3, 0);
-
-    //front range of mountains
-    r = new Range(start2, 0.008, speed, height/2);
 
     btn.mousePressed(animate)
 
+    secretBtn = createButton('MAKE THINGS WEIRD');
+    secretBtn.position(width-box*3, height-box*2);
+    
+    secretBtn.mousePressed(
+        function(){
+            if(weird){     
+                blendMode(BLEND);
+                colors[8].setAlpha(1);
+                weird = false;
+            }else{
+                blendMode(OVERLAY);
+                colors[8].setAlpha(1);
+                weird = true;
+        }
+    }
+    );
 
+    //back range of mountains
+    //divide speed for a parallax effect
+    mountains1 = new Range(0, .01, speed/3, 0);
+
+    //front range of mountains
+    mountains2 = new Range(10000, 0.008, speed, height/2);
 }
 
 
@@ -71,30 +114,34 @@ function draw(){
     background(setColor(colors[2],colors[5]));
     noStroke();
 
+    fill(colors[8]);
+    rect(0,0,width,height);
+
     fill(setColor(colors[6],colors[7]));
     ellipse(width*.75, height/10, width/10, width/10);
     
     fill(setColor(colors[1],colors[4]));
-    p.drawRange();
+    mountains1.drawRange();
 
     fill(setColor(colors[0],colors[3]));
-    r.drawRange();
+    mountains2.drawRange();
 
     let val = drivingSpeed.value();
 
-    p.setSpeed(val/3);
-    r.setSpeed(val);
+    mountains1.setSpeed(val/3);
+    mountains2.setSpeed(val);
 
-    p.setHeight(mountainHeight.value());
-    r.setHeight(mountainHeight.value());
+    mountains1.setHeight(mountainHeight.value());
+    mountains2.setHeight(mountainHeight.value());
 
     
 }
 
-
+/** 
+ * class to generate a mountain range based on perlin noise
+ */
 class Range{
     /** 
-     * 
      * @param {number} [start] startng x val on perlin noise curve
      * @param {number} [inc] how much to increment x val of curve, or mountain frequency & slope, best between .0001 and .01
      * @param {number} [speed] how quickly the range moves across the screen
