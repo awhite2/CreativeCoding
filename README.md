@@ -1,4 +1,4 @@
-## Welcome to GitHub Pages
+## Abra White | Creative Coding
 
 You can use the [editor on GitHub](https://github.com/awhite2/CreativeCoding/edit/main/README.md) to maintain and preview the content for your website in Markdown files.
 
