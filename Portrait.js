@@ -1,8 +1,8 @@
-let portaits = []
+let portraits = []
 
 function preload(){
     let json = loadJSON('portraits.json',
-                        loadPortraits(),
+                        loadPortraits,
                         function(){print("err")});
 
 }
@@ -17,12 +17,12 @@ function draw(){
 
 }
 function loadPortraits(data){
-    print(data);
     for(var i = 0; i<data.portraits.length; i++){
         let name = data.portraits[i].name;
         let posx = data.portraits[i].posx;
         let posy = data.portraits[i].posy;
         let landscape = data.portraits[i].landscape;
-        portaits.push(new Portrait(name, posx, posy, landscape));
+        portraits.push(new Portrait(name, posx, posy, landscape));
     }
+    print(portraits);
 }
