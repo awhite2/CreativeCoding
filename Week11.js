@@ -10,6 +10,7 @@ let contacts;//contacts data
 let relationships;//types of relationships
 var geoGenerator;
 var projection;
+let cxt;
 
 let colors;
 let c = 0;//color iterator 
@@ -23,7 +24,7 @@ function preload(){
     contacts = loadJSON(url2);
     
 }
-let cxt;
+
 function setup(){
     
     var c = createCanvas(windowWidth,windowHeight);
@@ -49,35 +50,35 @@ function draw(){
     h+=60;
 
     
-  projection = d3.geoMercator();
-  geoGenerator = d3.geoPath().projection(projection).context(ctx);
-  
-  
-  //draw countries
-  ctx.beginPath();
-  geoGenerator({type: 'FeatureCollection', features:   geographies.features});
-  fill('#fdfdfd');
-  ctx.fill();
-  stroke('grey');
-  ctx.stroke();
+    projection = d3.geoMercator();
+    geoGenerator = d3.geoPath().projection(projection).context(ctx);
+    
+    
+    //draw countries
+    ctx.beginPath();
+    geoGenerator({type: 'FeatureCollection', features:   geographies.features});
+    fill('#fdfdfd');
+    ctx.fill();
+    stroke('grey');
+    ctx.stroke();
 
 
-  //Pull distinct locations and relationships
-  let locs = new Set(contacts.features.map(x => x.properties.Location));
-  relationships = new Set(contacts.features.map(x => x.properties.Relation));
-  
-  //loop through locations
-  locs.forEach(circs);
+    //Pull distinct locations and relationships
+    let locs = new Set(contacts.features.map(x => x.properties.Location));
+    relationships = new Set(contacts.features.map(x => x.properties.Relation));
+    
+    //loop through locations
+    locs.forEach(circs);
 
-  //draw legend
-  c = 0;
-  relationships.forEach(legend);
-  c = 0;
+    //draw legend
+    c = 0;
+    relationships.forEach(legend);
+    c = 0;
 
-  //text for me
-  fill('black');
-  textSize(14);
-  text("me", projection([-30,0])[0], projection([-30,0])[1]);
+    //text for me
+    fill('black');
+    textSize(14);
+    text("me", projection([-30,0])[0], projection([-30,0])[1]);
 
   
 }
@@ -110,7 +111,7 @@ function circs(set){
       ctx.stroke();
       ctx.fill();
 
-      
+
       strokeWeight(1);
       stroke('black');
       let center = projection(p);
