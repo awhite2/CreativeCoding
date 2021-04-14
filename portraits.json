@@ -1,37 +1,37 @@
 {
     "portraits" : [
         {
-            "name": "Angelica_Kauffman.png", 
+            "name": "https://github.com/awhite2/CreativeCoding/blob/main/assets/Cutouts/Angelica_Kauffman.png?raw=true", 
             "posx" : 300,
             "posy" :  300, 
             "landscape": "true"
         },
-        {"name": "Anne_Seymour_Damer.png", 
+        {"name": "https://github.com/awhite2/CreativeCoding/blob/main/assets/Cutouts/Anne_Seymour_Damer.png?raw=true", 
             "posx" : 300,
             "posy" :  300, 
             "landscape": "true"
         },
-        {"name": "Artemesia_Gentileschi.png", 
+        {"name": "https://github.com/awhite2/CreativeCoding/blob/main/assets/Cutouts/Artemesia_Gentileschi.png?raw=true", 
             "posx" : 300,
             "posy" :  300, 
             "landscape": "true"
         },
-        {"name": "Edmonia_Lewis.png", 
+        {"name": "https://github.com/awhite2/CreativeCoding/blob/main/assets/Cutouts/Edmonia_Lewis.png?raw=true", 
             "posx" : 300,
             "posy" :  300, 
             "landscape": "true"
         },
-        {"name": "Elisabetta_Sirani.png", 
+        {"name": "https://github.com/awhite2/CreativeCoding/blob/main/assets/Cutouts/Elisabetta_Sirani.png?raw=true", 
             "posx" : 300,
             "posy" :  300, 
             "landscape": "true"
         },
-        {"name": "Lavinia_Fintana.png", 
+        {"name": "https://github.com/awhite2/CreativeCoding/blob/main/assets/Cutouts/Lavinia_Fintana.png?raw=true", 
             "posx" : 300,
             "posy" :  300, 
             "landscape": "true"
         },
-        {"name": "Margaret_Foley.png", 
+        {"name": "https://github.com/awhite2/CreativeCoding/blob/main/assets/Cutouts/Margaret_Foley.png?raw=true", 
             "posx" : 300,
             "posy" :  300, 
             "landscape": "true"
